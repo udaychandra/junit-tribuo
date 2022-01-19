@@ -6,7 +6,7 @@ JUnit provides extension points to hook into its lifecycle and add custom featur
 
 In this thought experiment, we leverage Tribuo within a custom JUnit extension to see the feasibility of using ML to potentially gain useful QA insights for a given service or product. 
 
-The custom [extension](src/main/java/io/github/udaychandra/jt/JTExtension.java) computes the total time taken to execute a test class. The data is recorded in a CSV file. For simplicity, all the data that gets collected is naively interpreted as an `EXPECTED` observation. Once we collect enough data, Tribuo's anomaly detection will be used to find any unusual observations when the test classes are run. For instance, say a given test class usually takes somewhere between 2-3 seconds to successfully run all the tests in it. Now a relevant product change gets introduced. Given that there are no changes to the test class and the execution environment it runs in, but it now takes 10 seconds to successfully run the tests. This could point to a potential performance regression (an over simplification, of course). If the trained model is doing its job right, this unusual behavior is immediately marked as a problem by the extension.  
+The custom [extension](src/main/java/io/github/udaychandra/jt/JTExtension.java) computes the total time taken to execute a test class. The data is recorded in a CSV file. For simplicity, all the data that gets collected is naively interpreted as an `EXPECTED` observation. Once we collect enough data, Tribuo's anomaly detection will be used to find any unusual observations when the test classes are run. For instance, say a given test class usually takes somewhere between 2-3 seconds to successfully run all the tests in it. Now a relevant product change gets introduced but no changes are made to the test class and the execution environment it runs in. It now takes 10 seconds to successfully run the tests. This could point to a potential performance regression (an over simplification, of course). If the trained model is doing its job right, this unusual behavior should now be marked as a problem.  
 
 Take a look at [HashUtilsTest.java](src/test/java/io/github/udaychandra/jt/HashUtilsTest.java) to see how the `AnomalyDetector` annotation gets used.
 
@@ -15,7 +15,7 @@ When the timing of the test class runs are as expected, we see something like th
 Prediction(maxLabel=(EXPECTED,...
 ```
 
-When an anomaly is detected, we see something like this:
+When the model detects an anomaly, we see something like this:
 ```bash
 Prediction(maxLabel=(ANOMALOUS,...
 ```
