@@ -1,0 +1,9 @@
+**/jt-ds/
+**/.DS_Store/
+**/*.iml
+
+target/
+out/
+.idea/
+.project
+.classpath
